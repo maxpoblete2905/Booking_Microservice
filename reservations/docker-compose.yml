@@ -1,0 +1,27 @@
+services:
+  hotels:
+    image: maxi1234/hotels:latest
+    mem_limit: 800m
+    ports:
+      - "8080:8080"
+    networks:
+      - booking-network
+
+  rooms:
+    image: maxi1234/rooms:latest
+    mem_limit: 800m
+    ports:
+      - "8081:8081"
+    networks:
+      - booking-network
+
+  reservations:
+    image: maxi1234/reservations:latest
+    mem_limit: 800m
+    ports:
+      - "8082:8082"
+    networks:
+      - booking-network
+
+networks:
+  booking-network:
