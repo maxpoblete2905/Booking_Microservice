@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
 @AllArgsConstructor
 @Builder
 @Configuration
-@ConfigurationProperties(prefix = "reservations")
+@ConfigurationProperties(prefix = "rooms")
 public class RoomsConfigurations {
     private String msg;
     private String buildVersion;
