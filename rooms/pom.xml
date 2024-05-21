@@ -14,7 +14,7 @@
 	<artifactId>rooms</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>rooms</name>
-	<description>Microservices for Rooms</description>
+	<description>Microservices for Hotels</description>
 
 	<properties>
 		<java.version>17</java.version>
@@ -83,6 +83,33 @@
 			<version>5.7.0</version>
 			<scope>test</scope>
 		</dependency>
+
+		<!-- Eureka Server -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+		</dependency>
+
+		<!-- Hibernate Validator -->
+		<dependency>
+			<groupId>org.hibernate.validator</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>7.0.2.Final</version> <!-- Reemplaza con la versión más reciente -->
+		</dependency>
+
+		<!-- Jakarta EL -->
+		<dependency>
+			<groupId>org.glassfish</groupId>
+			<artifactId>jakarta.el</artifactId>
+			<version>3.0.3</version>
+		</dependency>
+
+		<!-- Jakarta Validation API -->
+		<dependency>
+			<groupId>jakarta.validation</groupId>
+			<artifactId>jakarta.validation-api</artifactId>
+			<version>3.0.2</version>
+		</dependency>
 	</dependencies>
 
 	<dependencyManagement>
@@ -100,18 +127,6 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<excludes>
-						<exclude>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-						</exclude>
-					</excludes>
-				</configuration>
-			</plugin>
-			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.8.1</version>
@@ -119,6 +134,10 @@
 					<source>17</source>
 					<target>17</target>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
 	</build>

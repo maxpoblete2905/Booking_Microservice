@@ -1,4 +1,4 @@
-package com.aleal.reservations.Config;
+package com.aleal.reservations.config;
 
 import java.util.Map;
 
@@ -9,8 +9,6 @@ import lombok.Builder;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.Map;
 
 @Data
 @NoArgsConstructor
