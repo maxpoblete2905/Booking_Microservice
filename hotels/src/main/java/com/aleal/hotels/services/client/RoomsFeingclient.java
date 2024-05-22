@@ -15,3 +15,4 @@ public interface RoomsFeingclient {
     public List<Rooms> searchByHotelId(@PathVariable Long id);
 
 }
+
