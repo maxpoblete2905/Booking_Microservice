@@ -4,6 +4,7 @@ import java.util.*;
 
 import com.aleal.hotels.model.HotelRooms;
 import com.aleal.hotels.model.Rooms;
+import com.aleal.hotels.services.client.RoomsFeingclient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -16,9 +17,11 @@ public class HotelServiceImpl implements IHotelService {
 
 	@Autowired
 	private IHotelDao hotelDao;
+    @Autowired
+    private RoomsFeingclient roomsFeingclient;
 
-	@Autowired
-	private RestTemplate clientRest;
+//	@Autowired
+//	private RestTemplate clientRest;
 
 	@Override
 	public List<Hotel> search() {
@@ -30,20 +33,35 @@ public class HotelServiceImpl implements IHotelService {
 		HotelRooms hotelrooms = new HotelRooms();
 		Optional<Hotel> hotel = hotelDao.findById(hotelId);
 
-		if (!hotel.isPresent()) {
-			// Manejo del caso donde el hotel no está presente
-			return null;
-		}
+		List<Rooms> rooms = roomsFeingclient.searchByHotelId(hotelId);
 
-		Map<String, Long> pathVariables = new HashMap<>();
-		pathVariables.put("id", hotelId);
-		List<Rooms> rooms = Arrays.asList(Objects.requireNonNull(
-				clientRest.getForObject("http://localhost:8081/rooms/{id}", Rooms[].class, pathVariables)
-		));
 		hotelrooms.setHotelId((int) hotel.get().getHotelId());
 		hotelrooms.setHotelName(hotel.get().getHotelName());
 		hotelrooms.setHotelAddress(hotel.get().getHotelAddress());
 		hotelrooms.setRooms(rooms);
 		return hotelrooms;
 	}
+
+//	@Override
+//	public HotelRooms searchHotelById(long hotelId) {
+//		HotelRooms hotelrooms = new HotelRooms();
+//		Optional<Hotel> hotel = hotelDao.findById(hotelId);
+//
+//		if (!hotel.isPresent()) {
+//			// Manejo del caso donde el hotel no está presente
+//			return null;
+//		}
+//
+//		Map<String, Long> pathVariables = new HashMap<>();
+//		pathVariables.put("id", hotelId);
+//		List<Rooms> rooms = Arrays.asList(Objects.requireNonNull(
+//				clientRest.getForObject("http://localhost:8081/rooms/{id}", Rooms[].class, pathVariables)
+//		));
+//		hotelrooms.setHotelId((int) hotel.get().getHotelId());
+//		hotelrooms.setHotelName(hotel.get().getHotelName());
+//		hotelrooms.setHotelAddress(hotel.get().getHotelAddress());
+//		hotelrooms.setRooms(rooms);
+//		return hotelrooms;
+//	}
+
 }
