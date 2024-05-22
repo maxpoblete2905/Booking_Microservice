@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.aleal.rooms.dao.IRoomDao;
 import com.aleal.rooms.model.Room;
 
@@ -18,5 +17,9 @@ public class RoomServiceImpl implements IRoomService {
 	public List<Room> search() {
 		return (List<Room>) roomDao.findAll();
 	}
+
+	@Override
+	public List<Room> searchRoomsByHotelsId(long hotelId) {
+		return roomDao.findByHotelId(hotelId);	}
 
 }
