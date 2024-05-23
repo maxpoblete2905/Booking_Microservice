@@ -8,7 +8,7 @@ services:
       - booking-network
 
   eurekaserver:
-    image: maxi1234/discovery
+    image: maxi1234/discovery:latest
     mem_limit: 800m
     ports:
       - "8065:8065"
@@ -90,12 +90,12 @@ services:
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8065/eureka/
 
   gatewayserver:
-    image: aleal007/gatewayserver:latest
+    image: maxi1234/gatewayserver:latest
     mem_limit: 800m
     ports:
-      - "8066:8066"
+      - "8086:8086"
     networks:
-      - aleal-network
+      - booking-network
     depends_on:
       - configserver
       - eurekaserver
@@ -112,5 +112,6 @@ services:
       SPRING_PROFILES_ACTIVE: default
       SPRING_CONFIG_IMPORT: configserver:http://configserver:8085
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8065/eureka/
+
 networks:
   booking-network:
