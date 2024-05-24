@@ -9,6 +9,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,22 +20,25 @@ import com.aleal.hotels.services.IHotelService;
 
 @RestController
 public class HotelController {
-	
 	@Autowired
 	private IHotelService service;
 
 	@Autowired
 	private HotelsServiceConfigurations configHotels;
 
+	private static final Logger logger = LoggerFactory.getLogger(HotelController.class);
+
 	@GetMapping("hotels")
 	public List<Hotel> search(){
-		return (List<Hotel>) this.service.search();	
+		logger.info("Inicio de metodo search Hotels");
+		return (List<Hotel>) this.service.search();
 	}
 
 	@GetMapping("hotels/{hotelId}")
 	//@CircuitBreaker(name = "searchHotelByIdSupportCB", fallbackMethod = "searchHotelByAlternative")
 	@Retry(name = "searchHotelByIdSupportRetry", fallbackMethod = "searchHotelByAlternative")
 	public HotelRooms searchHotelById(@PathVariable Long hotelId){
+		logger.info("inicio metodo searchHotelById");
 		return  this.service.searchHotelById(hotelId);
 	}
 
