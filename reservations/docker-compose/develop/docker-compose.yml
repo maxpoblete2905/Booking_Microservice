@@ -1,4 +1,26 @@
 services:
+
+  zipkin:
+    image: openzipkin/zipkin
+    mem_limit: 800m
+    ports:
+      - "9411:9411"
+    networks:
+      - booking-network
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:24.0.4
+    mem_limit: 800m
+    command: start-dev
+    ports:
+      - "8087:8080"
+    networks:
+      - booking-network
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+
+
   configserver:
     image: maxi1234/config:latest
     mem_limit: 800m
