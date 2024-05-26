@@ -1,7 +1,7 @@
 services:
 
   zipkin:
-    image: openzipkin/zipkin
+    image: openzipkin/zipkin:latest
     mem_limit: 800m
     ports:
       - "9411:9411"

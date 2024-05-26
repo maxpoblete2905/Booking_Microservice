@@ -1,7 +1,7 @@
 services:
 
   zipkin:
-    image: openzipkin/zipkin
+    image: openzipkin/zipkin:latest
     mem_limit: 800m
     ports:
       - "9411:9411"
@@ -27,9 +27,14 @@ services:
       - "8085:8085"
     networks:
       - booking-network
+    depends_on:
+      - zipkin
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
 
   eurekaserver:
-    image: maxi1234/discovery
+    image: maxi1234/discovery:latest
     mem_limit: 800m
     ports:
       - "8065:8065"
@@ -46,6 +51,7 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: prod
       SPRING_CONFIG_IMPORT: configserver:http://configserver:8085
+      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
 
   hotels:
     image: maxi1234/hotels:latest
@@ -67,7 +73,7 @@ services:
       SPRING_PROFILES_ACTIVE: prod
       SPRING_CONFIG_IMPORT: configserver:http://configserver:8085
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8065/eureka/
-
+      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
 
   reservations:
     image: maxi1234/reservations:latest
@@ -89,7 +95,7 @@ services:
       SPRING_PROFILES_ACTIVE: prod
       SPRING_CONFIG_IMPORT: configserver:http://configserver:8085
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8065/eureka/
-
+      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
 
   rooms:
     image: maxi1234/rooms:latest
@@ -111,7 +117,32 @@ services:
       SPRING_PROFILES_ACTIVE: prod
       SPRING_CONFIG_IMPORT: configserver:http://configserver:8085
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8065/eureka/
+      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
 
+  gatewayserver:
+    image: maxi1234/gatewayserver:latest
+    mem_limit: 800m
+    ports:
+      - "8086:8086"
+    networks:
+      - booking-network
+    depends_on:
+      - configserver
+      - eurekaserver
+      - hotels
+      - rooms
+      - reservations
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 50s
+        max_attempts: 3
+        window: 180s
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      SPRING_CONFIG_IMPORT: configserver:http://configserver:8085
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8065/eureka/
+      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
 
 networks:
   booking-network:
