@@ -1,4 +1,4 @@
-package com.aleal.reservations.controllerIntegrationTest;
+package com.aleal.hotels.hotels.controllerIntegrationTest;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -27,16 +27,32 @@ public class ControllerIntegrationTest {
 
     @Test
     public void testSearchEndpoint() throws Exception {
-        mockMvc.perform(get("/reservations"))
+        mockMvc.perform(get("/hotels"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray());
     }
 
     @Test
     public void testGetPropertiesReservationsEndpoint() throws Exception {
-        mockMvc.perform(get("/reservations/read/properties"))
+        mockMvc.perform(get("/hotels/read/properties"))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.parseMediaType("text/plain;charset=UTF-8")));
+                .andExpect(content().contentType(MediaType.parseMediaType("text/plain;charset=UTF-8"))
+                );
+    }
+
+    @Test
+    public void testSearchHotelById() throws Exception {
+        mockMvc.perform(get("/hotels/1"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.hotelId").exists())
+                .andExpect(jsonPath("$.hotelName").exists())
+                .andExpect(jsonPath("$.hotelAddress").exists())
+                .andExpect(jsonPath("$.rooms").isArray())
+                .andExpect(jsonPath("$.rooms[0].roomId").exists())
+                .andExpect(jsonPath("$.rooms[0].hotelId").exists())
+                .andExpect(jsonPath("$.rooms[0].roomName").exists())
+                .andExpect(jsonPath("$.rooms[0].roomAvailable").exists());
     }
 
 }
