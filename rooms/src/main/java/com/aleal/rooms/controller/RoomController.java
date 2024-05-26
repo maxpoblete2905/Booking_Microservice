@@ -31,7 +31,6 @@ public class RoomController {
 	@GetMapping("rooms")
 	public List<Room> search(){
 		logger.info("inicio metodo search rooms");
-
 		return (List<Room>) this.service.search();
 	}
 
